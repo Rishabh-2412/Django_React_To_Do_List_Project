@@ -48,11 +48,28 @@ function App() {
         );
     };
 
+    const editTask = (indexToEdit, newTitle) => {
+        setTasks(
+            tasks.map((task, index) =>
+                index === indexToEdit
+                    ? {
+                        ...task,
+                        title: newTitle
+                    }
+                    : task
+            )
+        );
+    };
+
     return (
         <div className="App">
             <h1>My To-Do List</h1>
             <TaskForm addTask={addTask}/>
-            <TaskList tasks={tasks} deleteTask={deleteTask} toggleComplete={toggleComplete}/>
+            <TaskList tasks={tasks} 
+                deleteTask={deleteTask} 
+                toggleComplete={toggleComplete} 
+                editTask={editTask}
+            />
         </div>
     );
 }
