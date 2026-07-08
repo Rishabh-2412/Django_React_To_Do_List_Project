@@ -1,38 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
+import api from "./services/api";
 
 function App() {
 
-    const [tasks, setTasks] = useState([
-        {
-            title: "Learn React",
-            completed: false
-        },
-        {
-            title: "Learn Django",
-            completed: true
-        },
-        {
-            title: "Learn DRF",
-            completed: false
-        }
-    ]);
+    const [tasks, setTasks] = useState([]);
 
-    const addTask = (newTask) => {
-        setTasks([...tasks,
-            {
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                const response = await api.get("tasks/");
+                setTasks(response.data);
+            }
+            catch(error){
+                console.log(error);
+            }
+        };
+        fetchTasks();
+    }, []);
+
+    const addTask = async (newTask) => {
+        try {
+            const response = await api.post("tasks/", {
                 title: newTask,
                 completed: false
-            }
-        ]);
+            });
+            setTasks((previousTasks) => [...previousTasks, response.data]);
+        }
+        catch (error) {
+            console.log(error);
+        }
     };
 
-    const deleteTask = (indexToDelete) => {
-        setTasks(
-            tasks.filter((task, index) => index !== indexToDelete)
-        );
+    const deleteTask = async (taskId) => {
+        try {
+            await api.delete(`tasks/${taskId}/`);
+            setTasks((previousTasks) =>
+                previousTasks.filter(
+                    (task) => task.id !== taskId
+                )
+            );
+        }
+        catch(error){
+            console.log(error);
+        }
     };
 
     const toggleComplete = (indexToToggle) => {

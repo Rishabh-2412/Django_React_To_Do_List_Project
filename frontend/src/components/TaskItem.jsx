@@ -56,7 +56,7 @@ function TaskItem({ task, index, deleteTask, toggleComplete, editTask }) {
                 )
             }
 
-            <button onClick={() => deleteTask(index)} >Delete</button>
+            <button onClick={() => deleteTask(task.id)} >Delete</button>
         </div>
     );
 }
