@@ -14,7 +14,7 @@ function App() {
                 const response = await api.get("tasks/");
                 setTasks(response.data);
             }
-            catch(error){
+            catch (error) {
                 console.log(error);
             }
         };
@@ -43,44 +43,50 @@ function App() {
                 )
             );
         }
-        catch(error){
+        catch (error) {
             console.log(error);
         }
     };
 
-    const toggleComplete = (indexToToggle) => {
-        setTasks(
-            tasks.map((task, index) =>
-                index === indexToToggle
-                    ? {
-                        ...task,
-                        completed: !task.completed
-                    }
-                    : task
-            )
-        );
+    const toggleComplete = async (task) => {
+        try {
+            const response = await api.patch(`tasks/${task.id}/`,
+                {
+                    completed: !task.completed
+                }
+            );
+            setTasks((previousTasks) =>
+                previousTasks.map((t) => t.id === task.id ? response.data : t)
+            );
+        }
+        catch (error) {
+            console.log(error);
+        }
     };
 
-    const editTask = (indexToEdit, newTitle) => {
-        setTasks(
-            tasks.map((task, index) =>
-                index === indexToEdit
-                    ? {
-                        ...task,
-                        title: newTitle
-                    }
-                    : task
-            )
-        );
+    const editTask = async (taskId, newTitle) => {
+        try {
+            const response = await api.patch(`tasks/${taskId}/`,
+                {
+                    title: newTitle
+                }
+            );
+            setTasks((previousTasks) =>
+                previousTasks.map((task) => task.id === taskId ? response.data : task)
+            );
+        }
+        catch (error) {
+            console.log(error);
+        }
     };
 
     return (
         <div className="App">
             <h1>My To-Do List</h1>
-            <TaskForm addTask={addTask}/>
-            <TaskList tasks={tasks} 
-                deleteTask={deleteTask} 
-                toggleComplete={toggleComplete} 
+            <TaskForm addTask={addTask} />
+            <TaskList tasks={tasks}
+                deleteTask={deleteTask}
+                toggleComplete={toggleComplete}
                 editTask={editTask}
             />
         </div>
