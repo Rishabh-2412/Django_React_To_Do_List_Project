@@ -81,14 +81,22 @@ function App() {
     };
 
     return (
-        <div className="App">
-            <h1>My To-Do List</h1>
-            <TaskForm addTask={addTask} />
-            <TaskList tasks={tasks}
-                deleteTask={deleteTask}
-                toggleComplete={toggleComplete}
-                editTask={editTask}
-            />
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-8 col-lg-6">
+                    <div className="card shadow-lg">
+                        <div className="card-body">
+                            <h1 className="text-center mb-4">My To-Do List</h1>
+                            <TaskForm addTask={addTask} />
+                            <TaskList tasks={tasks}
+                                deleteTask={deleteTask}
+                                toggleComplete={toggleComplete}
+                                editTask={editTask}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
