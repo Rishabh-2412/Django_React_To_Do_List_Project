@@ -1,0 +1,29 @@
+.stats-card{
+    border:none;
+    border-radius:18px;
+    transition:all .25s ease;
+    cursor:default;
+}
+
+.stats-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 30px rgba(0,0,0,.15);
+}
+
+.total-card{
+
+    background:#eef5ff;
+
+}
+
+.completed-card{
+
+    background:#eafaf1;
+
+}
+
+.pending-card{
+
+    background:#fff8e6;
+
+}

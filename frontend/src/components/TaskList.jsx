@@ -1,4 +1,5 @@
 import TaskItem from "./TaskItem";
+import { motion, AnimatePresence } from "framer-motion";
 
 function TaskList({ tasks, deleteTask, toggleComplete, editTask }) {
 
@@ -14,17 +15,25 @@ function TaskList({ tasks, deleteTask, toggleComplete, editTask }) {
                     </div>
                 )
                 :
-                (
-                    tasks.map((task) => (
-                        <TaskItem
+                <AnimatePresence>
+                    {tasks.map((task) => (
+                        <motion.div
                             key={task.id}
-                            task={task}
-                            deleteTask={deleteTask}
-                            toggleComplete={toggleComplete}
-                            editTask={editTask}
-                        />
-                    ))
-                )
+                            layout
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, x: 100 }}
+                            transition={{ duration: 0.25 }}
+                        >
+                            <TaskItem
+                                task={task}
+                                deleteTask={deleteTask}
+                                toggleComplete={toggleComplete}
+                                editTask={editTask}
+                            />
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
             }
         </div>
     );

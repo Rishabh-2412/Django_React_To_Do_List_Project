@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 
-function TaskForm({ addTask }) {
+function TaskForm({ addTask , loading}) {
     const [task, setTask] = useState("");
     const inputRef = useRef(null);
 
@@ -25,7 +25,18 @@ function TaskForm({ addTask }) {
                 />
                 <button type="submit" 
                         className="btn btn-primary"
-                        disabled={!task.trim()}> Add </button>
+                        disabled={!task.trim() || loading}>
+                            {
+                                loading ? (
+                                    <>
+                                        <span
+                                            className="spinner-border spinner-border-sm me-2"
+                                            role="status"
+                                            aria-hidden="true"
+                                        ></span>
+                                        Adding...
+                                    </>
+                                ) : ( "Add" ) }</button>
             </div>
         </form>
 
