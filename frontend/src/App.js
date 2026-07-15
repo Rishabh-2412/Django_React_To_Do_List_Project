@@ -13,6 +13,7 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [taskToDelete, setTaskToDelete] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const openDeleteModal = (task) => {
         setTaskToDelete(task);
@@ -138,6 +139,13 @@ function App() {
                             />
 
                             <TaskForm addTask={addTask} loading={loading} />
+                            <input
+                                type="text"
+                                className="form-control my-3"
+                                placeholder="🔍 Search tasks..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
                             <TaskList tasks={tasks}
                                 deleteTask={openDeleteModal}
                                 toggleComplete={toggleComplete}

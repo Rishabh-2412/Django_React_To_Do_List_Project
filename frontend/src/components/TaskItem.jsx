@@ -64,7 +64,7 @@ function TaskItem({ task, index, deleteTask, toggleComplete, editTask }) {
                     )
                 }
 
-                <button onClick={() => deleteTask(task.id)} 
+                <button onClick={() => deleteTask(task)} 
                         className="btn btn-outline-danger btn-sm"> <i className="bi bi-trash"></i> </button>
                 </div>
             </div>
