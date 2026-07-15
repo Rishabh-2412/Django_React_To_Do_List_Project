@@ -44,7 +44,7 @@ function App() {
 
     const addTask = async (newTask) => {
         setLoading(true);
-        try{
+        try {
             try {
                 const response = await api.post("tasks/", {
                     title: newTask,
@@ -56,10 +56,10 @@ function App() {
             catch (error) {
                 console.log(error);
             }
-        }catch (error) {
+        } catch (error) {
             console.log(error);
             toast.error("Something went wrong!");
-        }finally{
+        } finally {
             setLoading(false);
         }
     };
@@ -123,95 +123,99 @@ function App() {
 
     const pendingTasks = totalTasks - completedTasks;
 
+    const filteredTasks = tasks.filter((task) =>
+        task.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <>
-        <div className="container mt-5">
-            <div className="row justify-content-center">
-                <div className="col-md-8 col-lg-6">
-                    <div className="card shadow-lg">
-                        <div className="card-body">
-                            <h1 className="text-center mb-4">My To-Do List</h1>
+            <div className="container mt-5">
+                <div className="row justify-content-center">
+                    <div className="col-md-8 col-lg-6">
+                        <div className="card shadow-lg">
+                            <div className="card-body">
+                                <h1 className="text-center mb-4">My To-Do List</h1>
 
-                            <Stats
-                                totalTasks={totalTasks}
-                                completedTasks={completedTasks}
-                                pendingTasks={pendingTasks}
-                            />
+                                <Stats
+                                    totalTasks={totalTasks}
+                                    completedTasks={completedTasks}
+                                    pendingTasks={pendingTasks}
+                                />
 
-                            <TaskForm addTask={addTask} loading={loading} />
-                            <input
-                                type="text"
-                                className="form-control my-3"
-                                placeholder="🔍 Search tasks..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                            <TaskList tasks={tasks}
-                                deleteTask={openDeleteModal}
-                                toggleComplete={toggleComplete}
-                                editTask={editTask}
-                            />
+                                <TaskForm addTask={addTask} loading={loading} />
+                                <input
+                                    type="text"
+                                    className="form-control my-3"
+                                    placeholder="🔍 Search tasks..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                <TaskList tasks={filteredTasks}
+                                    deleteTask={openDeleteModal}
+                                    toggleComplete={toggleComplete}
+                                    editTask={editTask}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <ToastContainer
-            position="top-right"
-            autoClose={2500}
-            hideProgressBar={false}
-            newestOnTop
-            closeOnClick
-            pauseOnHover
-            theme="colored"
-        />
-        <div
-            className={`modal fade ${showDeleteModal ? "show d-block" : ""}`}
-            tabIndex="-1"
-            style={{
-                backgroundColor: "rgba(0,0,0,0.5)"
-            }}
-        >
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title">
-                            Delete Task
-                        </h5>
-                        <button
-                            type="button"
-                            className="btn-close"
-                            onClick={closeDeleteModal}
-                        ></button>
-                    </div>
-                    <div className="modal-body">
-                        <p>
-                            Are you sure you want to delete
-                            <strong>
-                                {" "}
-                                {taskToDelete?.title}
-                                {" "}
-                            </strong>
-                            ?
-                        </p>
-                    </div>
-                    <div className="modal-footer">
-                        <button
-                            className="btn btn-secondary"
-                            onClick={closeDeleteModal}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            className="btn btn-danger"
-                            onClick={confirmDelete}
-                        >
-                            Delete
-                        </button>
+            <ToastContainer
+                position="top-right"
+                autoClose={2500}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                pauseOnHover
+                theme="colored"
+            />
+            <div
+                className={`modal fade ${showDeleteModal ? "show d-block" : ""}`}
+                tabIndex="-1"
+                style={{
+                    backgroundColor: "rgba(0,0,0,0.5)"
+                }}
+            >
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">
+                                Delete Task
+                            </h5>
+                            <button
+                                type="button"
+                                className="btn-close"
+                                onClick={closeDeleteModal}
+                            ></button>
+                        </div>
+                        <div className="modal-body">
+                            <p>
+                                Are you sure you want to delete
+                                <strong>
+                                    {" "}
+                                    {taskToDelete?.title}
+                                    {" "}
+                                </strong>
+                                ?
+                            </p>
+                        </div>
+                        <div className="modal-footer">
+                            <button
+                                className="btn btn-secondary"
+                                onClick={closeDeleteModal}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="btn btn-danger"
+                                onClick={confirmDelete}
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </>
     );
 }
