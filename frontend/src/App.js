@@ -14,6 +14,8 @@ function App() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [taskToDelete, setTaskToDelete] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
+    const [filter, setFilter] = useState("all");
+    const [sortBy, setSortBy] = useState("newest");
 
     const openDeleteModal = (task) => {
         setTaskToDelete(task);
@@ -123,9 +125,34 @@ function App() {
 
     const pendingTasks = totalTasks - completedTasks;
 
-    const filteredTasks = tasks.filter((task) =>
-        task.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredTasks = tasks.filter((task) => {
+        const matchesSearch =
+            task.title.toLowerCase().includes(searchTerm.toLowerCase());
+        if (!matchesSearch)
+            return false;
+        if (filter === "active")
+            return !task.completed;
+        if (filter === "completed")
+            return task.completed;
+        return true;
+    });
+
+    const sortedTasks = [...filteredTasks].sort((a, b) => {
+        switch (sortBy) {
+            case "alphabet":
+                return a.title.localeCompare(b.title);
+            case "oldest":
+                return a.id - b.id;
+            case "newest":
+                return b.id - a.id;
+            case "completed":
+                return Number(b.completed) - Number(a.completed);
+            case "pending":
+                return Number(a.completed) - Number(b.completed);
+            default:
+                return 0;
+        }
+    });
 
     return (
         <>
@@ -150,7 +177,37 @@ function App() {
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
-                                <TaskList tasks={filteredTasks}
+
+                                <div className="btn-group mb-3">
+                                    <button
+                                        className={`btn ${filter === "all" ? "btn-primary" : "btn-outline-primary"}`}
+                                        onClick={() => setFilter("all")}
+                                    > All </button>
+                                    <button
+                                        className={`btn ${filter === "active" ? "btn-primary" : "btn-outline-primary"}`}
+                                        onClick={() => setFilter("active")}
+                                    > Active </button>
+                                    <button
+                                        className={`btn ${filter === "completed" ? "btn-primary" : "btn-outline-primary"}`}
+                                        onClick={() => setFilter("completed")}
+                                    > Completed </button>
+                                </div>
+
+                                <div className="mb-3">
+                                    <select
+                                        className="form-select"
+                                        value={sortBy}
+                                        onChange={(e) => setSortBy(e.target.value)}
+                                    >
+                                        <option value="newest">Newest First</option>
+                                        <option value="oldest">Oldest First</option>
+                                        <option value="alphabet">Alphabetical (A-Z)</option>
+                                        <option value="completed">Completed First</option>
+                                        <option value="pending">Pending First</option>
+                                    </select>
+                                </div>
+
+                                <TaskList tasks={sortedTasks}
                                     deleteTask={openDeleteModal}
                                     toggleComplete={toggleComplete}
                                     editTask={editTask}
