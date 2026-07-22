@@ -48,10 +48,7 @@ function App() {
         setLoading(true);
         try {
             try {
-                const response = await api.post("tasks/", {
-                    title: newTask,
-                    completed: false
-                });
+                const response = await api.post("tasks/", newTask);
                 setTasks((previousTasks) => [...previousTasks, response.data]);
                 toast.success("Task added successfully!");
             }

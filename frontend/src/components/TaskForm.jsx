@@ -2,13 +2,18 @@ import { useState, useRef } from "react";
 
 function TaskForm({ addTask , loading}) {
     const [task, setTask] = useState("");
+    const [dueDate, setDueDate] = useState("");
     const inputRef = useRef(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if(task.trim()==="") return;
-        addTask(task);
+        addTask({
+            title: task,
+            due_date: dueDate || null
+        });
         setTask("");
+        setDueDate("");
         inputRef.current.focus();
     };
 
@@ -23,6 +28,12 @@ function TaskForm({ addTask , loading}) {
                     onChange={(e)=>setTask(e.target.value)}
                     className="form-control"
                 />
+                <input
+                    type="date"
+                    className="form-control mt-2"
+                    value={dueDate}
+                    onChange={(e) => setDueDate(e.target.value)}
+                />
                 <button type="submit" 
                         className="btn btn-primary"
                         disabled={!task.trim() || loading}>
@@ -33,8 +44,7 @@ function TaskForm({ addTask , loading}) {
                                             className="spinner-border spinner-border-sm me-2"
                                             role="status"
                                             aria-hidden="true"
-                                        ></span>
-                                        Adding...
+                                        ></span> Adding...
                                     </>
                                 ) : ( "Add" ) }</button>
             </div>
