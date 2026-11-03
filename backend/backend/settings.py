@@ -146,4 +146,4 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://django-react-to-do-list-project.vercel.app"
 ]
-"No /"
+# "No /"
